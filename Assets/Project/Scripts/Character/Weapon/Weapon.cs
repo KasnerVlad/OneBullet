@@ -1,5 +1,8 @@
 using System.Collections.Generic;
 using Custom;
+using Project.Scripts.Character;
+using Project.Scripts.Enemy;
+using Project.Scripts.Enums;
 using Project.Scripts.Pool;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,21 +17,19 @@ namespace Project.Scripts.Weapon
         [SerializeField] private UnityEvent onBulletEnd;
         [SerializeField] private BulletPathPreview bulletPathPreview;
         [SerializeField] private Transform firePoint;
+        [SerializeField] private DynamicTimeScale dynamicTimeScale;
         private BulletGiver bulletGiver;
+        private Bullet lastBullet;
+        
         private void Awake()
         {
-            InputManager.playerInput.Weapon.Shoot.performed += e => Shoot();
+            InputManager.playerInput.Weapon.Shoot.performed += e =>
+            {
+                if(ModeManager.Instance.nowMode==Mode.ShootMode) Shoot();
+            };
             bulletGiver = new BulletGiver();
             bulletGiver.SetNeededPrefab(bulletPrefab);
-
-        }
-
-        private void Update()
-        {
-            if (Input.GetMouseButtonDown(0))
-            {
-                Shoot();
-            }
+            InputManager.playerInput.Enable();
         }
         private void Shoot()
         {
@@ -40,11 +41,13 @@ namespace Project.Scripts.Weapon
                 bulletGiver.SetPosition(firePoint.position);
                 bulletGiver.SetRotation(firePoint.rotation);
                 GameObject bulletGameObject = bulletGiver.GetGameObjectFromPool();
+                
                 Bullet bullet = bulletGameObject.GetComponent<Bullet>();
                 if (bullet != null)
                 {
-                    bullet.Init(bulletGiver);
+                    bullet.Init(bulletGiver, this);
                     _=bullet.Shoot(bulletPathPreview.GetPoints());
+                    lastBullet=bullet;
                 }
             }
 
@@ -56,7 +59,12 @@ namespace Project.Scripts.Weapon
 
         public void OnBulletEnd()
         {
-            CTime.timeScale = 0.3f;
+            dynamicTimeScale.StartDynamicTimeScaleChange(lastBullet);
+        }
+
+        public void CheckWin()
+        {
+            AllEnemyController.Instance.CheckWin();
         }
         
     }

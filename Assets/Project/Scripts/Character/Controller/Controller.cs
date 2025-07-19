@@ -7,6 +7,8 @@ using Custom;
 using static Models;
 using Player.Character;
 using Project.Scripts;
+using Project.Scripts.Character;
+using Project.Scripts.Enums;
 using Unity.VisualScripting;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -75,8 +77,9 @@ public class Controller : MonoBehaviour
         stanceCalculation = new StanceCalculation(_stand, _crouch, _prone, cameraHolder, characterController, CanStand);*/
         InputManager.playerInput.Character.View.performed += e =>
         {
-            if(canLook) view = e.ReadValue<Vector2>();
+            if(canLook&&ModeManager.Instance.nowMode==Mode.ShootMode) view = e.ReadValue<Vector2>();
         };
+        InputManager.playerInput.Enable();
         look = new Look(gunHolder, cam, camOffset);
         move = new Move(playerSettings.jumpSettings,playerSettings.movementSettings, transform, characterController);
         
@@ -90,7 +93,7 @@ public class Controller : MonoBehaviour
     void FixedUpdate()
     {
         move.CalculateMovement(isSprinting, movement, ref currentSpeed); 
-        if(canLook){ look.CalculateView(view, rotSmoothTime);}
+        if(canLook&&ModeManager.Instance.nowMode==Mode.ShootMode){ look.CalculateView(view, rotSmoothTime);}
         move.CalculateJump(isJumping);/*
         stanceCalculation.CalculateStance(currentPlayerStance, playerStanceSmoothing);*/
     }

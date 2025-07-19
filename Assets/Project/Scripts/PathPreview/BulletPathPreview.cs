@@ -16,51 +16,56 @@ namespace Project.Scripts
         [SerializeField]private LayerMask notIgnoreMask;
         private Dictionary<Vector3, ReflectorType> points;
         private LineRenderer lineRenderer;
-        
+        private BoxCollider boxCollider;
         void Start()
         {
             lineRenderer = GetComponent<LineRenderer>();
+            boxCollider = GetComponent<BoxCollider>();
         }
 
         void Update()
         {
-            Vector3 startPosition = transform.position;
-            Vector3 direction = transform.right;
-
             points = new Dictionary<Vector3, ReflectorType>();
-            points.Add(startPosition, ReflectorType.None);
-
-            for (int i = 0; i < maxBounces; i++)
+            
+            bool isContact = Physics.CheckBox(transform.position+boxCollider.center,boxCollider.size, transform.rotation,notIgnoreMask);
+            if (!isContact)
             {
-                Ray ray = new Ray(startPosition, direction);
-                RaycastHit hit;
-
-                if (Physics.Raycast(ray, out hit, maxDistance, notIgnoreMask))
+                Vector3 startPosition = transform.position;
+                Vector3 direction = transform.right;
+    
+                points.Add(startPosition, ReflectorType.None);
+    
+                for (int i = 0; i < maxBounces; i++)
                 {
-                    RaycastHit rhit;
-                    ReflectorTypeSet reflectorTypeSet = hit.collider.gameObject.GetComponent<ReflectorTypeSet>();
-                    if (reflectorTypeSet != null) points.Add(hit.point, reflectorTypeSet.reflectorType);
-                    else points.Add(hit.point, ReflectorType.None);
-                    direction = Vector3.Reflect(direction, hit.normal);
-                    startPosition = hit.point + direction * 0.01f; 
-                    if (Physics.Raycast(ray, out rhit, maxDistance, reflectorMask))
+                    Ray ray = new Ray(startPosition, direction);
+                    RaycastHit hit;
+    
+                    if (Physics.Raycast(ray, out hit, maxDistance, notIgnoreMask))
                     {
-                        if (rhit.point != hit.point)
+                        RaycastHit rhit;
+                        ReflectorTypeSet reflectorTypeSet = hit.collider.gameObject.GetComponent<ReflectorTypeSet>();
+                        if (reflectorTypeSet != null) points.Add(hit.point, reflectorTypeSet.reflectorType);
+                        else points.Add(hit.point, ReflectorType.None);
+                        direction = Vector3.Reflect(direction, hit.normal);
+                        startPosition = hit.point + direction * 0.01f; 
+                        if (Physics.Raycast(ray, out rhit, maxDistance, reflectorMask))
+                        {
+                            if (rhit.point != hit.point)
+                                break;
+                        }
+                        else
+                        {
                             break;
+                        }
+    
                     }
                     else
                     {
+                        points.Add(startPosition + direction * maxDistance, ReflectorType.None);
                         break;
                     }
-
-                }
-                else
-                {
-                    points.Add(startPosition + direction * maxDistance, ReflectorType.None);
-                    break;
                 }
             }
-
             lineRenderer.positionCount = points.Count;
             lineRenderer.SetPositions(points.Keys.ToArray());
         }
@@ -69,5 +74,19 @@ namespace Project.Scripts
         {
             return points;
         }
+
+        /*private void OnTriggerEnter(Collider other)
+        {
+            _contatsGameObjects.Add(other.gameObject);
+            Debug.Log(_contatsGameObjects.Count);
+            Debug.Log(other.gameObject.name);
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            _contatsGameObjects.Remove(other.gameObject);
+            Debug.Log(_contatsGameObjects.Count);
+            Debug.Log(other.gameObject.name);
+        }*/
     }
 }

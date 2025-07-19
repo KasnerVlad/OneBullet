@@ -6,29 +6,31 @@ using UnityEngine.UI;
 
 public class HpController : MonoBehaviour
 {
-    private PlayerHpModel _playerHpModel;
-    private PlayerHpView _playerHpView;
+    private HpModel _hpModel;
+    private HpView _hpView;
     [SerializeField]private Slider hpScrollbar;
+    [SerializeField]private int maxHp;
     [SerializeField]private UnityEvent onDeath;
+    public int MaxHp=>maxHp;
     private void Start()
     {
-        _playerHpModel = new PlayerHpModel(onDeath);
-        _playerHpView = new PlayerHpView(hpScrollbar);
-        _playerHpView.UpdateHp(_playerHpModel.CurrentHealth, _playerHpModel.maxHp);
+        _hpModel = new HpModel(onDeath, maxHp);
+        _hpView = new HpView(hpScrollbar);
+        _hpView.UpdateHp(_hpModel.CurrentHealth, _hpModel.maxHp);
     }
 
     public bool TakeDamage(int damage)
     {
         Debug.Log(damage + " damage");
-        bool death = _playerHpModel.TakeDamage(damage);
-        _playerHpView.UpdateHp(_playerHpModel.CurrentHealth, _playerHpModel.maxHp);
+        bool death = _hpModel.TakeDamage(damage);
+        _hpView.UpdateHp(_hpModel.CurrentHealth, _hpModel.maxHp);
         return death;
     }
 
     public void Heal(int heal)
     {
         Debug.Log(heal + " heal");
-        _playerHpModel.RegenerateHp(heal);
-        _playerHpView.UpdateHp(_playerHpModel.CurrentHealth, _playerHpModel.maxHp);
+        _hpModel.RegenerateHp(heal);
+        _hpView.UpdateHp(_hpModel.CurrentHealth, _hpModel.maxHp);
     }
 }

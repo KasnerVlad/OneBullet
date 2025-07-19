@@ -3,13 +3,13 @@ using UnityEngine.Events;
 
 namespace StarterAssets.FirstPersonController.Scripts.PlayerHpSystem
 {
-    public class PlayerHpModel
+    public class HpModel
     {
-        public readonly int maxHp = 100;
+        public readonly int maxHp;
         private readonly int _minHp = 0;
         private readonly UnityEvent _onDeath;
         public int CurrentHealth{get; private set;}
-        public PlayerHpModel(UnityEvent onDeath) {CurrentHealth = maxHp; _onDeath = onDeath; }
+        public HpModel(UnityEvent onDeath, int maxHp) {this.maxHp=maxHp; CurrentHealth = maxHp; _onDeath = onDeath; }
 
         public bool TakeDamage(int damage)
         {

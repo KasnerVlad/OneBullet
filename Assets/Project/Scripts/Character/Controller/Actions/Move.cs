@@ -19,6 +19,8 @@ namespace Player.Character
         private readonly Transform _player;
         private Vector3 newMovementSpeedVector;
         private Vector3 moveVelocity;
+        private float targetRotation;
+        private float targetRotationVelocity;
         #endregion
         public Move(PlayerSettings.Jump _jumpSettings,
             PlayerSettings.MovementSettings _movementSettings,
@@ -63,12 +65,15 @@ namespace Player.Character
                 horizontal *= movementSettings.airControlMultiplier;/*
                 vertical *= movementSettings.airControlMultiplier;*/
             }
+            float targetRot = horizontal>0?-90:horizontal<0?90:0;
+            targetRotation=Mathf.SmoothDamp(targetRotation, targetRot, ref targetRotationVelocity, characterController.isGrounded?movementSettings.moveSmoothing:movementSettings.fallingSmoothing );
             newMovementSpeedVector=Vector3.SmoothDamp(newMovementSpeedVector,
                 new Vector3(horizontal,0,/*vertical*/0), 
                 ref moveVelocity, 
                 (characterController.isGrounded?movementSettings.moveSmoothing:movementSettings.fallingSmoothing )) ;
             
-            var movementSpeedVector = _player.TransformDirection(newMovementSpeedVector);
+            characterController.transform.rotation = Quaternion.Euler(new Vector3(0, targetRotation, 0));
+            var movementSpeedVector = /*_player.TransformDirection(*/newMovementSpeedVector/*)*/;
             
             if (_playerGravity > jumpSettings.gravityMin) { _playerGravity-=jumpSettings.gravity*Time.deltaTime; }
             
@@ -79,7 +84,6 @@ namespace Player.Character
             movementSpeedVector += jumpForce *Time.deltaTime;
             
             characterController.Move(movementSpeedVector);
-            
             var characterVelocityInverseTransformDirection = _player.InverseTransformDirection(characterController.velocity);
             
             currentSpeed=new Vector3(characterVelocityInverseTransformDirection.x,

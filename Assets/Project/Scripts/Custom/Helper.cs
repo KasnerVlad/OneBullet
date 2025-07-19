@@ -56,6 +56,17 @@ namespace Custom
             }
             return string.Join("/", path);
         }*/
+        public static Quaternion RotateTo(Vector3 to, Vector3 pos, Vector3 offset)
+        {
+            Vector3 direction = to - pos;
+        
+            float angleRad = Mathf.Atan2(direction.y, direction.x);
+            float angleDeg = angleRad * Mathf.Rad2Deg;
+        
+            Quaternion finalRotation = Quaternion.Euler(new Vector3(0f, 0f, angleDeg) + offset);
+            
+            return finalRotation;
+        }
     }
     public static class LayerMaskComparer
     {
