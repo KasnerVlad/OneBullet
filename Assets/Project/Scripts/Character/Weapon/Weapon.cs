@@ -18,6 +18,7 @@ namespace Project.Scripts.Weapon
         [SerializeField] private BulletPathPreview bulletPathPreview;
         [SerializeField] private Transform firePoint;
         [SerializeField] private DynamicTimeScale dynamicTimeScale;
+        [SerializeField] private CamManager camManager;
         private BulletGiver bulletGiver;
         private Bullet lastBullet;
         
@@ -25,7 +26,7 @@ namespace Project.Scripts.Weapon
         {
             InputManager.playerInput.Weapon.Shoot.performed += e =>
             {
-                if(ModeManager.Instance.nowMode==Mode.ShootMode) Shoot();
+                if(ModeManager.Instance.nowMode==Mode.ShootMode&&!InputFieldFocusChecker.InputFieldFocused) Shoot();
             };
             bulletGiver = new BulletGiver();
             bulletGiver.SetNeededPrefab(bulletPrefab);
@@ -59,7 +60,8 @@ namespace Project.Scripts.Weapon
 
         public void OnBulletEnd()
         {
-            dynamicTimeScale.StartDynamicTimeScaleChange(lastBullet);
+            _=dynamicTimeScale.StartDynamicTimeScaleChange(lastBullet);
+            _=camManager.FocusOnBullet(lastBullet);
         }
 
         public void CheckWin()

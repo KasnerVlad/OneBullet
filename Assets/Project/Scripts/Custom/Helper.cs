@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+using System.Globalization;
+using System.Text;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 
@@ -66,6 +69,70 @@ namespace Custom
             Quaternion finalRotation = Quaternion.Euler(new Vector3(0f, 0f, angleDeg) + offset);
             
             return finalRotation;
+        }
+
+        public static float GetFloatFromInputField(TMP_InputField inputField)
+        {
+            if (inputField == null || string.IsNullOrEmpty(inputField.text))
+            {
+                return 0.0f; // Возвращаем 0, если InputField пуст или не задан
+            }
+
+            string rawText = inputField.text;
+            StringBuilder cleanedTextBuilder = new StringBuilder();
+            bool hasDecimalPoint = false;
+            bool isFirstChar = true;
+
+            foreach (char c in rawText)
+            {
+                if (char.IsDigit(c)) // Если символ - цифра
+                {
+                    cleanedTextBuilder.Append(c);
+                }
+                else if (c == '.' || c == ',') // Если символ - точка или запятая (десятичный разделитель)
+                {
+                    // Убедимся, что это первый десятичный разделитель
+                    if (!hasDecimalPoint)
+                    {
+                        // В C# float.Parse ожидает точку как десятичный разделитель по умолчанию для InvariantCulture
+                        // или для текущей региональной культуры. Лучше всегда преобразовывать к точке.
+                        cleanedTextBuilder.Append('.'); 
+                        hasDecimalPoint = true;
+                    }
+                    // Игнорируем все последующие точки/запятые
+                }
+                else if (c == '-' && isFirstChar) // Если символ - минус и это первый символ
+                {
+                    cleanedTextBuilder.Append(c);
+                }
+                // Игнорируем все остальные символы
+                
+                isFirstChar = false; // После первого символа, флаг сбрасывается
+            }
+
+            string cleanedText = cleanedTextBuilder.ToString();
+
+            // Проверяем, если строка стала пустой после чистки (например, было "abc")
+            if (string.IsNullOrEmpty(cleanedText) || cleanedText == "-")
+            {
+                return 0.0f; // Возвращаем 0, если не осталось числовых символов
+            }
+
+            float result;
+            // Используем TryParse для безопасного преобразования
+            // NumberStyles.Float позволяет парсить числа с десятичной точкой и знаком
+            // CultureInfo.InvariantCulture гарантирует, что точка всегда будет разделителем, независимо от региональных настроек пользователя
+            if (float.TryParse(cleanedText, NumberStyles.Float, CultureInfo.InvariantCulture, out result))
+            {
+                inputField.text = result.ToString(CultureInfo.InvariantCulture);
+                return result;
+            }
+            else
+            {
+                // Это может произойти, если, например, строка стала "." или "-" после чистки
+                Debug.LogWarning($"Не удалось преобразовать очищенную строку '{cleanedText}' в float. Возвращаем 0.");
+                return 0.0f;
+            }
         }
     }
     public static class LayerMaskComparer

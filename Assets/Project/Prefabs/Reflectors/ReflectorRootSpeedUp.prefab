@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2450838637283743362}
   - component: {fileID: 4626030705703036161}
   - component: {fileID: 9098555783344071819}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: ReflectorRootSpeedUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}

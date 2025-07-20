@@ -40,7 +40,7 @@ public class Controller : MonoBehaviour
         InputManager.playerInput.Character.Enable();
         InputManager.playerInput.Character.Movement.performed += e =>
         {
-            if (canMove)
+            if (canMove&&!InputFieldFocusChecker.InputFieldFocused)
             {
                 movement = e.ReadValue<Vector2>();
                 if (movement.y >0)
@@ -56,7 +56,7 @@ public class Controller : MonoBehaviour
         };
         InputManager.playerInput.Character.Jump.performed += e =>
         {
-            if (canMove)
+            if (canMove&&!InputFieldFocusChecker.InputFieldFocused)
             {            
                 isJumping = true;
                 isJumprework = true;
@@ -65,7 +65,7 @@ public class Controller : MonoBehaviour
         };
         InputManager.playerInput.Character.JumpUp.performed += e =>
         {
-            if (canMove)
+            if (canMove&&!InputFieldFocusChecker.InputFieldFocused)
             {            
                 isJumping = false;
                 isJumprework = false;
@@ -77,7 +77,7 @@ public class Controller : MonoBehaviour
         stanceCalculation = new StanceCalculation(_stand, _crouch, _prone, cameraHolder, characterController, CanStand);*/
         InputManager.playerInput.Character.View.performed += e =>
         {
-            if(canLook&&ModeManager.Instance.nowMode==Mode.ShootMode) view = e.ReadValue<Vector2>();
+            if(canLook&&ModeManager.Instance.nowMode==Mode.ShootMode&&!InputFieldFocusChecker.InputFieldFocused) view = e.ReadValue<Vector2>();
         };
         InputManager.playerInput.Enable();
         look = new Look(gunHolder, cam, camOffset);
@@ -93,7 +93,7 @@ public class Controller : MonoBehaviour
     void FixedUpdate()
     {
         move.CalculateMovement(isSprinting, movement, ref currentSpeed); 
-        if(canLook&&ModeManager.Instance.nowMode==Mode.ShootMode){ look.CalculateView(view, rotSmoothTime);}
+        if(canLook&&ModeManager.Instance.nowMode==Mode.ShootMode&&!InputFieldFocusChecker.InputFieldFocused){ look.CalculateView(view, rotSmoothTime);}
         move.CalculateJump(isJumping);/*
         stanceCalculation.CalculateStance(currentPlayerStance, playerStanceSmoothing);*/
     }

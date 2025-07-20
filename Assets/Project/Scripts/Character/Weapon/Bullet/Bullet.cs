@@ -14,7 +14,7 @@ namespace Project.Scripts.Weapon
         private BulletGiver _bulletGiver;
         [SerializeField]private float smooth;
         private Vector3 _currentTarget;
-        private bool _isShooting;
+        public bool _isShooting{get;private set;}
         private int lastIndex;
         [SerializeField] private Vector3 rotOffset;
         [SerializeField] private float defaultSpeed;
@@ -36,8 +36,6 @@ namespace Project.Scripts.Weapon
         {
             Vector3 direction = transform.position - previousPosition;
             float distance = direction.magnitude;
-
-            // Если объект действительно движется
             if (distance > 0)
             {
                 RaycastHit hit;
@@ -50,8 +48,7 @@ namespace Project.Scripts.Weapon
                     {
                         HpController hpController = other.gameObject.GetComponent<HpController>();
                         if (hpController != null)
-                        {
-                            Debug.Log("Hp detected");
+                        { 
                             bool death = hpController.TakeDamage(DamageBySpeed(speed, hpController.MaxHp));
                             if (!death)
                             {   
@@ -76,8 +73,7 @@ namespace Project.Scripts.Weapon
                 }
                 
                 lastIndex = 0;
-                _currentTarget=points[0];/*
-                speed = SpeedShiftByReflectorType(path[_currentTarget]);*/
+                _currentTarget=points[0];
                 transform.LookAt(_currentTarget);
                 while (Vector3.Distance(transform.position,points[^1]) > 0.01f&&!_cts.IsCancellationRequested&& Application.isPlaying)
                 {
