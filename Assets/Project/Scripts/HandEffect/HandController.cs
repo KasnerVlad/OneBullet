@@ -25,34 +25,31 @@ public class HandController : MonoBehaviour
     [SerializeField]private Camera cam;
     
     [Header("Dynamic Segment Calculation")]
-    public float targetSegmentLength = 0.5f; // Бажана довжина кожного сегмента. Чем меньше, тем больше сегментов и плавнее мост.
-    public int minSegmentCount = 5;      // Минимальное количество сегментов.
-    public int maxSegmentCount = 50;     // Максимальное количество сегментов.
+    public float targetSegmentLength = 0.5f; 
+    public int minSegmentCount = 5;     
+    public int maxSegmentCount = 50;     
 
     [Header("Bridge Physics Parameters")]
-    public int constraintIterations = 10; // Сколько раз "исправлять" связи за кадр (больше = стабильнее)
-    public float damping = 0.99f;         // Затухание движения (0.99 = небольшое затухание, 0.9 = быстрее затухание)
-    public float gravityScale = 1.0f;     // Масштаб влияния гравитации (можно увеличить или уменьшить)
+    public int constraintIterations = 10; 
+    public float damping = 0.99f;         
+    public float gravityScale = 1.0f;     
 
     private List<BridgeNode> nodes = new List<BridgeNode>();
-    private float currentBridgeLength;    // Текущая общая длина моста (расстояние между якорями)
-    private int actualSegmentCount;       // Фактическое количество сегментов, вычисленное динамически
-    private float actualSegmentLength;    // Фактическая длина каждого сегмента
+    private float currentBridgeLength;    
+    private int actualSegmentCount;       
+    private float actualSegmentLength;    
     private void Awake()
     {
         InputManager.playerInput.UI.Grab.performed += e => {if(ModeManager.Instance.nowMode==Mode.EditMode) handGrab.SetActive(true); handStraight.SetActive(false); };
         InputManager.playerInput.UI.UnGrab.performed += e => {if(ModeManager.Instance.nowMode==Mode.EditMode)handGrab.SetActive(false); handStraight.SetActive(true); };
         InputManager.playerInput.Enable();
-        handLine.useWorldSpace = true; // Используем мировые координаты
-
-        
+        handLine.useWorldSpace = true;
     }
 
     private void Start()
     {
         InitializeNodes(false);
     }
-    // Update is called once per frame
     private void FixedUpdate()
     {
         if (ModeManager.Instance.nowMode == Mode.EditMode)
@@ -88,38 +85,6 @@ public class HandController : MonoBehaviour
             handLine.gameObject.SetActive(false);
             startPoint.SetActive(false);
             endPoint.SetActive(false);
-        }
-    }
-
-    private void UpdateLineRenderer()
-    {
-        DrawSaggingLine(startPoint.transform.position, endPoint.transform.position);
-
-    }
-    void DrawSaggingLine(Vector3 p1, Vector3 p2)
-    {
-        handLine.positionCount = numberOfPoints;
-
-        float distance = Vector3.Distance(p1, p2);
-        float sagDepth = distance * sagFactor;
-
-        for (int i = 0; i < numberOfPoints; i++)
-        {
-            float t = i / (float)(numberOfPoints - 1); // Прогресс от 0 до 1
-
-            Vector3 currentPoint = Vector3.Lerp(p1, p2, t);
-            
-            Vector3 direction = (p2 - p1).normalized;
-            Vector3 perpendicularDirection = Vector3.Cross(direction, Vector3.forward);
-            /*if (cam.orthographic)
-            {
-                perpendicularDirection = new Vector3(-direction.y, direction.x, 0).normalized;
-            }*/
-
-            float parabolaOffset = -4 * sagDepth * t * (1 - t);
-            currentPoint += perpendicularDirection * parabolaOffset;
-
-            handLine.SetPosition(i, currentPoint);
         }
     }
     private void UpdateRotations()
