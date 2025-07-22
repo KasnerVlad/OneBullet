@@ -24,6 +24,8 @@ namespace Project.Scripts
         private void Awake()
         {
             defaultTargetPointScale = targetPoint.transform.localScale;
+            
+            targetPoint.SetActive(false);
         }
         public void SetShow(bool show)
         {
@@ -71,14 +73,14 @@ namespace Project.Scripts
             {
                 
   
-                childObject.gameObject.SetActive(true);
+                targetPoint.SetActive(true);
                 childObject.position = parentObject.TransformPoint(initialLocalPosition);
     
                 childObject.rotation = parentObject.rotation * initialLocalRotation;
             }
             else
             {
-                childObject.gameObject.SetActive(false);
+                targetPoint.SetActive(false);
             }
 
         }

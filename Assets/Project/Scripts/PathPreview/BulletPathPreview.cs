@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Project.Scripts.Enums;
 using Project.Scripts.Reflector;
+using Project.Scripts.Weapon;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -23,11 +24,17 @@ namespace Project.Scripts
             boxCollider = GetComponent<BoxCollider>();
         }
 
-        void Update()
+
+        public Dictionary<Vector3, ReflectorType> GetPoints()
+        {
+            return points;
+        }
+        // Я буду переписивать етот метод под разние види пуль
+        public void Preview(BulletType bulletType)
         {
             points = new Dictionary<Vector3, ReflectorType>();
             
-            bool isContact = Physics.CheckBox(transform.position+boxCollider.center,boxCollider.size, transform.rotation,notIgnoreMask);
+            bool isContact = Physics.CheckBox(transform.position, Vector3.Scale(boxCollider.size/2, transform.lossyScale) , transform.rotation,notIgnoreMask);
             if (!isContact)
             {
                 Vector3 startPosition = transform.position;
@@ -70,11 +77,10 @@ namespace Project.Scripts
             lineRenderer.SetPositions(points.Keys.ToArray());
         }
 
-        public Dictionary<Vector3, ReflectorType> GetPoints()
+        public int GetPathCount()
         {
-            return points;
+            return points.Count;
         }
-
         /*private void OnTriggerEnter(Collider other)
         {
             _contatsGameObjects.Add(other.gameObject);

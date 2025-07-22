@@ -11,6 +11,7 @@ namespace Project.Scripts.Character
         [SerializeField] private Camera editModeCamera;
         [SerializeField] private Camera shootCamera;
         [SerializeField] private Camera focusedCamera;
+        [SerializeField] private Vector3 focusedCameraOffset;
         private bool _isSeeAllLevel;
         private bool Focusd;
         private void Awake()
@@ -46,6 +47,15 @@ namespace Project.Scripts.Character
             }
         }
 
+        public void UnFocus()
+        {
+            Focusd = false;
+            
+            focusedCamera.enabled = false;
+            allLevelCamera.enabled = false;
+            editModeCamera.enabled = false;
+            shootCamera.enabled = true;
+        }
         public async Task FocusOnBullet(Bullet bullet)
         {
             Focusd = true;
@@ -55,7 +65,7 @@ namespace Project.Scripts.Character
             shootCamera.enabled = false;
             while (bullet._isShooting&&Application.isPlaying )
             {
-                focusedCamera.transform.position = new Vector3( bullet.transform.position.x, bullet.transform.position.y, focusedCamera.transform.position.z );
+                focusedCamera.transform.position = new Vector3( bullet.transform.position.x, bullet.transform.position.y, focusedCamera.transform.position.z )+focusedCameraOffset;
                 await Task.Yield();
             }
             Focusd = false;

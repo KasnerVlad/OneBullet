@@ -5,7 +5,7 @@ namespace Project.Scripts.Character
 {
     public class ModeManager : MonoBehaviour
     {
-        public static ModeManager Instance;
+        public static ModeManager Instance{ get; private set; }
         [HideInInspector]
         public Mode nowMode;
 

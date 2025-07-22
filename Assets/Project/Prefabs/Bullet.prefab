@@ -154,7 +154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd5b2b08bb5243f7a24eb9b40f363859, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smooth: 0.0001
+  smooth: 0.001
   rotOffset: {x: 0, y: 0, z: 0}
   defaultSpeed: 100
   bulletSpeedChange: 10

@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Custom;
+using Project.Scripts.Character.Controller;
+using Project.Scripts.Enemy;
 using Project.Scripts.Enums;
 using Project.Scripts.Pool;
 using UnityEngine;
@@ -24,12 +26,16 @@ namespace Project.Scripts.Weapon
         public BoxCollider enemyTrigger;
         private CancellationTokenSource _cts;
         private Weapon _weapon;
-        private Vector3 previousPosition;   
-        public void Init(BulletGiver bulletGiver, Weapon weapon)
+        private EnemyManager _enemyManager;
+        private Vector3 previousPosition;
+        private bool hited;
+        public void Init(BulletGiver bulletGiver, Weapon weapon, EnemyManager enemyManager)
         {
             speed=defaultSpeed;
             _bulletGiver = bulletGiver;
             _weapon = weapon;
+            _enemyManager = enemyManager;
+            hited=false;
         }
 
         private void Update()
@@ -46,14 +52,21 @@ namespace Project.Scripts.Weapon
                     Debug.Log(other.gameObject.name);
                     if (LayerMaskComparer.Equals(enemyLayerMask, other.gameObject.layer))
                     {
-                        HpController hpController = other.gameObject.GetComponent<HpController>();
-                        if (hpController != null)
-                        { 
-                            bool death = hpController.TakeDamage(DamageBySpeed(speed, hpController.MaxHp));
-                            if (!death)
-                            {   
-                                if(_cts!=null)_cts.Cancel();
+                        if (other.gameObject!=_enemyManager.gameObject)
+                        {
+                            HpController hpController = other.gameObject.GetComponent<HpController>();
+                            EnemyManager enemyManager = other.gameObject.GetComponent<EnemyManager>();
+                            if (hpController != null)
+                            { 
+                                hpController.TakeDamage(hpController.MaxHp-1);
                             }
+                            if (enemyManager != null)
+                            {
+                                AllEnemyController.Instance.SetEnemyManager(enemyManager);
+                                _weapon.OnHit();
+                                hited=true;
+                            }
+                            _cts.Cancel();
                         }
                     }
                 }
@@ -88,9 +101,13 @@ namespace Project.Scripts.Weapon
                     }
                     await Task.Yield();
                 } 
-                Death();
                 _isShooting=false;
                 _cts.Cancel();
+                if (!hited)
+                {
+                    _weapon.OnNotHit();
+                }
+                Death();
             }
 
         }
@@ -128,8 +145,8 @@ namespace Project.Scripts.Weapon
         }*/
         private void Death()
         {
-            _bulletGiver.ReturnGameObjectToPool(gameObject);
-            _weapon.CheckWin();
+            _bulletGiver.ReturnGameObjectToPool(gameObject);/*
+            _weapon.CheckWin();*/
         }
     }
 }

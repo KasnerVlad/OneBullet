@@ -19,7 +19,7 @@ namespace Project.Scripts.Reflector
         private BoxCollider _childBoxCollider; 
         private Transform _childTransform; 
 
-        public LayerMask ignoreLayer; 
+        [SerializeField] private LayerMask ignoreLayer; 
 
         private Quaternion _lastValidRotation;
         private Camera _editCamera;
@@ -113,8 +113,8 @@ namespace Project.Scripts.Reflector
 
                 if (CanRotateTo(targetRotation))
                 {
-                    _reflector.transform.localRotation = targetRotation;
-                    transform.localRotation = targetRotation;
+                    _reflector.transform.rotation = targetRotation;
+                    transform.rotation = targetRotation;
                     _lastValidRotation = targetRotation; 
                     _inputField.text = (_reflector.transform.localRotation.ToEuler().z * Mathf.Rad2Deg).ToString(CultureInfo.InvariantCulture);
                 }
