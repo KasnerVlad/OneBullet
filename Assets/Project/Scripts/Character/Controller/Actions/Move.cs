@@ -74,10 +74,16 @@ namespace Player.Character
             
             characterController.transform.rotation = Quaternion.Euler(new Vector3(0, targetRotation, 0));
             var movementSpeedVector = /*_player.TransformDirection(*/newMovementSpeedVector/*)*/;
-            
-            if (_playerGravity > jumpSettings.gravityMin) { _playerGravity-=jumpSettings.gravity*Time.deltaTime; }
-            
-            if (_playerGravity < jumpSettings.gravityMinOnGround && (characterController.isGrounded)) { _playerGravity = jumpSettings.gravityMinOnGround; }
+
+            if (_playerGravity > jumpSettings.gravityMin)
+            {
+                _playerGravity-=jumpSettings.gravity*Time.deltaTime;
+            }
+
+            if (_playerGravity < jumpSettings.gravityMinOnGround && (characterController.isGrounded))
+            {
+                _playerGravity = jumpSettings.gravityMinOnGround;
+            }
 
             
             movementSpeedVector.y += _playerGravity*CTime.timeScale;

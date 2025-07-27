@@ -15,6 +15,13 @@ namespace Project.Scripts.Enemy
         public static AllEnemyController Instance;
         [SerializeField] private Camera MainCamera;
         public GameObject PlayerControllerEnemy=>GetPlayerControl();
+        [SerializeField] private GameObject player;
+
+        private void Update()
+        {
+            player = PlayerControllerEnemy;
+        }
+
         private void Awake()
         {
             Instance = this;
@@ -63,8 +70,8 @@ namespace Project.Scripts.Enemy
             {
                 if (enemy != null)
                 {
-                    enemyCount++;
-                    Debug.Log("Count: " + enemyCount);
+                    enemyCount++;/*
+                    Debug.Log("Count: " + enemyCount);*/
                 } 
             }
 

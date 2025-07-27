@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 591932442079398895}
   - component: {fileID: 4374454631686860548}
   - component: {fileID: 4067838123803789994}
+  - component: {fileID: 8526335882793011752}
+  - component: {fileID: 4813480076175403529}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
@@ -135,6 +137,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de6fcdbf7651474eab583c6ba527ab37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  obstacleLayer:
+    serializedVersion: 2
+    m_Bits: 1109
+  fieldOfViewAngle: 360
+  viewDistance: 100
+  stopDistance: 1.5
+  patrolSpeed: 1
+  chaseSpeed: 1
+  maxDistanceSurface: 2
+  currentTarget: {fileID: 0}
+  isChasing: 0
+  _enemyManager: {fileID: 591932442079398895}
+  gravity: 0.15
+  gravityMin: -3
+  gravityMinOnGround: -0.01
+  rotationSpeed: 20
+  JumpFallOff: 0.4
+  JumpHeight: 9
 --- !u!114 &591932442079398895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,6 +231,53 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.1, z: 0}
+--- !u!65 &8526335882793011752
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36443913902701784}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 10, y: 5, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4813480076175403529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36443913902701784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52a1b8a682e84cefa4dff68d77683e24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 1089
+  walkableMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  checkStep: 0.5
+  checkHeightOffset: -0.7
+  offset: 0.1
+  jumpDistance: 100
+  speed: 0
+  isStopped: 0
+  maxJumpHeight: 2
+  destinationUpdateThreshold: 0.2
 --- !u!1 &760748464441461609
 GameObject:
   m_ObjectHideFlags: 0
