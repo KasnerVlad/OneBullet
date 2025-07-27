@@ -16,7 +16,7 @@ TagManager:
   - Glass
   - Player
   - RotatorRoot
-  - 
+  - NoSelfCollision
   - 
   - 
   - 
