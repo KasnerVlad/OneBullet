@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Custom;
 using Project.Scripts.Character;
+using Project.Scripts.Character.Controller;
 using Project.Scripts.Enemy;
 using Project.Scripts.Enums;
 using Project.Scripts.Pool;
@@ -17,36 +18,42 @@ namespace Project.Scripts.Weapon
         [SerializeField] private UnityEvent onBulletEnd;
         [SerializeField] private BulletPathPreview bulletPathPreview;
         [SerializeField] private Transform firePoint;
-        [SerializeField] private DynamicTimeScale dynamicTimeScale;
-        [SerializeField] private CamManager camManager;
-        private BulletGiver bulletGiver;
+        /*[SerializeField] private CamManager camManager;*/
+        [SerializeField] private EnemyManager enemyManager;
+        [SerializeField] private HpController enemyHpController;
         private Bullet lastBullet;
         
-        private void Awake()
+        private void Start()
         {
             InputManager.playerInput.Weapon.Shoot.performed += e =>
             {
-                if(ModeManager.Instance.nowMode==Mode.ShootMode&&!InputFieldFocusChecker.InputFieldFocused) Shoot();
+                if(ModeManager.Instance.nowMode==Mode.ShootMode&&
+                   !InputFieldFocusChecker.InputFieldFocused&&enemyManager.IsPlayerControl)
+                    Shoot();
             };
-            bulletGiver = new BulletGiver();
-            bulletGiver.SetNeededPrefab(bulletPrefab);
+            AllBulletGiver.bulletGiver.SetNeededPrefab(bulletPrefab);
             InputManager.playerInput.Enable();
+        }
+
+        private void Update()
+        {
+            bulletPathPreview.Preview(BulletType.Normal);
         }
         private void Shoot()
         {
             Debug.Log("Shoot");
-            if (bulletCount > 0)
+            if (bulletCount > 0&&bulletPathPreview.GetPathCount()>1)
             {
                 bulletCount--;
-                bulletGiver.SetNeededPrefab(bulletPrefab);
-                bulletGiver.SetPosition(firePoint.position);
-                bulletGiver.SetRotation(firePoint.rotation);
-                GameObject bulletGameObject = bulletGiver.GetGameObjectFromPool();
+                AllBulletGiver.bulletGiver.SetNeededPrefab(bulletPrefab);
+                AllBulletGiver.bulletGiver.SetPosition(firePoint.position);
+                AllBulletGiver.bulletGiver.SetRotation(firePoint.rotation);
+                GameObject bulletGameObject = AllBulletGiver.bulletGiver.GetGameObjectFromPool();
                 
                 Bullet bullet = bulletGameObject.GetComponent<Bullet>();
                 if (bullet != null)
                 {
-                    bullet.Init(bulletGiver, this);
+                    bullet.Init(AllBulletGiver.bulletGiver, this, enemyManager);
                     _=bullet.Shoot(bulletPathPreview.GetPoints());
                     lastBullet=bullet;
                 }
@@ -60,13 +67,23 @@ namespace Project.Scripts.Weapon
 
         public void OnBulletEnd()
         {
-            _=dynamicTimeScale.StartDynamicTimeScaleChange(lastBullet);
-            _=camManager.FocusOnBullet(lastBullet);
+            _=DynamicTimeScale.Instance.StartDynamicTimeScaleChange(lastBullet);/*
+            _=camManager.FocusOnBullet(lastBullet);*/
         }
 
-        public void CheckWin()
+        public void OnNotHit()
         {
-            AllEnemyController.Instance.CheckWin();
+            enemyManager.SetPlayerControl(false);
+            enemyHpController.Death();
+        }
+        public void OnHit()
+        {
+            DynamicTimeScale.Instance.StopDynamicTimeScaleChange();
+            enemyManager.SetPlayerControl(false);
+            enemyHpController.Death();
+            _=CustomInvoke.Invoke(()=>AllEnemyController.Instance.CheckWin(), 100) ;
+            /*
+            camManager.UnFocus();*/
         }
         
     }

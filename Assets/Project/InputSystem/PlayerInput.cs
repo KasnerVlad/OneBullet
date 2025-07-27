@@ -373,6 +373,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ViewMoreLevel"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""e7233193-61c6-4a4a-9d56-b9c81ac09e0c"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -408,6 +417,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""ChangeMode"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1c79ca6c-759e-4dde-a519-722e7bf2a367"",
+                    ""path"": ""<Keyboard>/x"",
+                    ""interactions"": ""Hold(duration=0.1)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ViewMoreLevel"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -430,6 +450,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_UI_Grab = m_UI.FindAction("Grab", throwIfNotFound: true);
         m_UI_UnGrab = m_UI.FindAction("UnGrab", throwIfNotFound: true);
         m_UI_ChangeMode = m_UI.FindAction("ChangeMode", throwIfNotFound: true);
+        m_UI_ViewMoreLevel = m_UI.FindAction("ViewMoreLevel", throwIfNotFound: true);
     }
 
     ~@PlayerInput()
@@ -762,6 +783,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_Grab;
     private readonly InputAction m_UI_UnGrab;
     private readonly InputAction m_UI_ChangeMode;
+    private readonly InputAction m_UI_ViewMoreLevel;
     /// <summary>
     /// Provides access to input actions defined in input action map "UI".
     /// </summary>
@@ -785,6 +807,10 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "UI/ChangeMode".
         /// </summary>
         public InputAction @ChangeMode => m_Wrapper.m_UI_ChangeMode;
+        /// <summary>
+        /// Provides access to the underlying input action "UI/ViewMoreLevel".
+        /// </summary>
+        public InputAction @ViewMoreLevel => m_Wrapper.m_UI_ViewMoreLevel;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -820,6 +846,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @ChangeMode.started += instance.OnChangeMode;
             @ChangeMode.performed += instance.OnChangeMode;
             @ChangeMode.canceled += instance.OnChangeMode;
+            @ViewMoreLevel.started += instance.OnViewMoreLevel;
+            @ViewMoreLevel.performed += instance.OnViewMoreLevel;
+            @ViewMoreLevel.canceled += instance.OnViewMoreLevel;
         }
 
         /// <summary>
@@ -840,6 +869,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @ChangeMode.started -= instance.OnChangeMode;
             @ChangeMode.performed -= instance.OnChangeMode;
             @ChangeMode.canceled -= instance.OnChangeMode;
+            @ViewMoreLevel.started -= instance.OnViewMoreLevel;
+            @ViewMoreLevel.performed -= instance.OnViewMoreLevel;
+            @ViewMoreLevel.canceled -= instance.OnViewMoreLevel;
         }
 
         /// <summary>
@@ -966,5 +998,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnChangeMode(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "ViewMoreLevel" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnViewMoreLevel(InputAction.CallbackContext context);
     }
 }

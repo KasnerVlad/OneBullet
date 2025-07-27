@@ -238,7 +238,6 @@ public class HandController : MonoBehaviour
 
     void UpdateLineRendererPositions()
     {
-        // ... (без изменений) ...
         for (int i = 0; i < nodes.Count; i++)
         {
             handLine.SetPosition(i, nodes[i].currentPosition);

@@ -12,6 +12,13 @@ namespace Project.Scripts
         private bool _isDynamic;
         [SerializeField] private float timeScaleWithZeroDistance;
         [SerializeField] private float timeScaleWithOneDistance;
+        public static DynamicTimeScale Instance { get; private set; }
+
+        private void Awake()
+        {
+            Instance = this;
+        }
+
         public async Task StartDynamicTimeScaleChange(Bullet bullet)
         {
             _isDynamic = true;
@@ -68,6 +75,7 @@ namespace Project.Scripts
         public void StopDynamicTimeScaleChange()
         {
             _isDynamic = false;
+            CTime.timeScale = 1;
         }
     }
 }

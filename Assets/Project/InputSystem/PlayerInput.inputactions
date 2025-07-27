@@ -287,6 +287,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ViewMoreLevel",
+                    "type": "PassThrough",
+                    "id": "e7233193-61c6-4a4a-9d56-b9c81ac09e0c",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -320,6 +329,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "ChangeMode",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1c79ca6c-759e-4dde-a519-722e7bf2a367",
+                    "path": "<Keyboard>/x",
+                    "interactions": "Hold(duration=0.1)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ViewMoreLevel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

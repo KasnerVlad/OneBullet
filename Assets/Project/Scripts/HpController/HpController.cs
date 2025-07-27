@@ -33,4 +33,11 @@ public class HpController : MonoBehaviour
         _hpModel.RegenerateHp(heal);
         _hpView.UpdateHp(_hpModel.CurrentHealth, _hpModel.maxHp);
     }
+
+    public void Death()
+    {
+        Debug.Log(_hpModel.CurrentHealth + " damage");
+        _hpModel.TakeDamage(_hpModel.CurrentHealth);
+        _hpView.UpdateHp(_hpModel.CurrentHealth, _hpModel.maxHp);
+    }
 }

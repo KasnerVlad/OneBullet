@@ -146,5 +146,13 @@ namespace Custom
 
             return ((1 << queryMask) & storedMask) != 0;
         }
+        public static bool Equals2(int storedMask, int queryMask)
+        {
+            // Точное совпадение - высший приоритет
+            if (storedMask == queryMask) return true;
+        
+            // Проверка частичного совпадения
+            return (storedMask & queryMask) == queryMask;
+        }
     }
 }

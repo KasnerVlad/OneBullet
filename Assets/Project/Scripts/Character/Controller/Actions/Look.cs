@@ -1,3 +1,5 @@
+using System;
+
 namespace Player.Character
 {
     using UnityEngine;
@@ -19,22 +21,12 @@ namespace Player.Character
             _offset = offset;
         }
         public void CalculateView(Vector2 view,  float smoothTime)
-        {/*
-            _newCameraRotation.z += viewSettings.SensitivityY*Time.deltaTime*view.y*(viewSettings.YInvetred?-1f:1f);*/
-            
-            /*Vector3 direction = new Vector3(view.x, view.y, _obj.position.z) - _obj.position;
-
-            if (direction.x != 0) // Чтобы не было ошибки при нулевом направлении
-            {
-                float angleZ = Mathf.Atan2(direction.y, direction.z) * Mathf.Rad2Deg;
-
-                _newCameraRotation = new Vector3(0, 0, angleZ);
-            }*/
+        {
             Vector3 mouseScreenPosition = view;
             mouseScreenPosition.z = _cam.WorldToScreenPoint(_obj.position).z;
         
             Vector3 mouseWorldPosition = _cam.ScreenToWorldPoint(mouseScreenPosition);
-
+            mouseWorldPosition.z = 0;
             Vector2 direction = mouseWorldPosition - _obj.position;
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             tagetRot = new Vector3(0, 0, angle)+_offset;
