@@ -212,7 +212,6 @@ namespace Project.Scripts.Enemy.CustomAIAgent
             }
         
             currentPath = resultPath;
-            DebugLogger.Instance.WriteLog(Time.time, resultPath);
             currentIndex = 0;
             isCalculating = false;
             Debug.Log("Pathfinding finished. Path length: " + currentPath.Count);
