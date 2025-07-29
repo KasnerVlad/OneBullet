@@ -94,8 +94,8 @@ public class Controller : MonoBehaviour
     {
         if (enemyManager.IsPlayerControl)
         {
-            move.CalculateMovement(isSprinting, movement, ref currentSpeed); 
-            if(canLook&&ModeManager.Instance.nowMode==Mode.ShootMode&&!InputFieldFocusChecker.InputFieldFocused){ look.CalculateView(view, rotSmoothTime);}
+            move.CalculateMovement(isSprinting, movement, ref currentSpeed);
+            if (canLook && ModeManager.Instance.nowMode == Mode.ShootMode && !InputFieldFocusChecker.InputFieldFocused) { look.CalculateView(view, rotSmoothTime); }
             move.CalculateJump(isJumping);
         }
     }
