@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+/*using System.Collections.Generic;
 using JsonSave;
 using UnityEngine;
 
@@ -9,8 +9,8 @@ namespace Project.Scripts.Custom
         public static DebugLogger Instance;
         private LoggerData _loggerData;
         private ISaveSystem _saveSystem;/*
-        [SerializeField] private string _logFileName = "log.json";*/
-        [SerializeField] private string _logFilePath/* = Application.persistentDataPath + "/" + "log.json"*/;
+        [SerializeField] private string _logFileName = "log.json";#1#
+        [SerializeField] private string _logFilePath/* = Application.persistentDataPath + "/" + "log.json"#1#;
 
         private void Awake()
         {
@@ -31,4 +31,4 @@ namespace Project.Scripts.Custom
             Debug.Log(JsonUtility.ToJson(_loggerData));
         }
     }
-}
+}*/
