@@ -18,6 +18,8 @@ GameObject:
   - component: {fileID: 4067838123803789994}
   - component: {fileID: 8526335882793011752}
   - component: {fileID: 4813480076175403529}
+  - component: {fileID: 154208349849347926}
+  - component: {fileID: 1964237357524229468}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
@@ -152,12 +154,15 @@ MonoBehaviour:
   currentTarget: {fileID: 0}
   isChasing: 0
   _enemyManager: {fileID: 591932442079398895}
+  _enemyAnimsController: {fileID: 154208349849347926}
+  knifeCollider: {fileID: 1964237357524229468}
   gravity: 0.15
   gravityMin: -3
   gravityMinOnGround: -0.01
   rotationSpeed: 20
   JumpFallOff: 0.4
   JumpHeight: 9
+  damage: 5
 --- !u!114 &591932442079398895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,6 +283,41 @@ MonoBehaviour:
   isStopped: 0
   maxJumpHeight: 2
   destinationUpdateThreshold: 0.2
+  pathUpdateCooldown: 0.5
+--- !u!114 &154208349849347926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36443913902701784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63a0de9df58a40068681481763d129ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemy: {fileID: 6864545170072645701}
+--- !u!65 &1964237357524229468
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36443913902701784}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &760748464441461609
 GameObject:
   m_ObjectHideFlags: 0

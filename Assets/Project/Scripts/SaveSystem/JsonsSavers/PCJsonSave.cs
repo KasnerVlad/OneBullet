@@ -1,27 +1,28 @@
 using System;
 using System.IO;
+using Project.Scripts.SaveSystem;
 using UnityEngine;
 namespace JsonSave
 {
-    public class JsonSaveSystem : ISaveSystem
+    public class PCJsonSaveSystem : ISaveSystem
     {
-        public void Save<T>(T saveData, string path) {
+        public void Save<T>(T saveData, string key) {
             try
             {
                 var json = JsonUtility.ToJson(saveData);
-                using (var writer = new StreamWriter(path)) { writer.Write(json); }
+                using (var writer = new StreamWriter(key)) { writer.Write(json); }
             }
             catch (Exception e)
             {
                 Debug.LogError(e);
             }
         }
-        public T Load<T>(string path) {
+        public T Load<T>(string key) {
             try
             {
-                if (File.Exists(path)) {
+                if (File.Exists(key)) {
                     string json = "";
-                    using (var reader = new StreamReader(path))
+                    using (var reader = new StreamReader(key))
                     {
                         string line;
                         while ((line = reader.ReadLine()) != null) { json += line; }
@@ -39,9 +40,5 @@ namespace JsonSave
             return Activator.CreateInstance<T>();
         }
     }
-    public interface ISaveSystem
-    {
-        public void Save<T>(T saveData,string path);
-        public T Load<T>(string path);
-    }
+
 }

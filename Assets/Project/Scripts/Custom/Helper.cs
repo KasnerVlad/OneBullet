@@ -152,7 +152,7 @@ namespace Custom
             if (storedMask == queryMask) return true;
         
             // Проверка частичного совпадения
-            return (storedMask & queryMask) == queryMask;
+            return (storedMask & queryMask) == queryMask/*||(queryMask & storedMask) == storedMask*/;
         }
     }
 }

@@ -6,6 +6,7 @@ namespace Project.Scripts.Character.Controller
     {
         [SerializeField]private bool _isPlayerControl;
         [SerializeField] private Camera _camera;
+        /*[SerializeField] private*/public int moneyAmount;
         public bool IsPlayerControl=>_isPlayerControl;
 
         private void Awake()

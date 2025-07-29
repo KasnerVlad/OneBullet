@@ -204,12 +204,12 @@ namespace Project.Scripts.Reflector
         }
         private void OnDrawGizmos()
         {
-            Color originalGizmoColor = Gizmos.color;
+            /*Color originalGizmoColor = Gizmos.color;
             Matrix4x4 originalGizmoMatrix = Gizmos.matrix;
 
             /*
             Vector3 worldHalfExtents = Vector3.Scale(_childBoxCollider.size * 0.5f, _childTransform.lossyScale); 
-            Gizmos.color = Color.yellow; */
+            Gizmos.color = Color.yellow; #1#
             float colliderRadius = mySphereCollider.radius;
             float maxScale = Mathf.Max(transform.localScale.x, transform.localScale.y, transform.localScale.z);
             float actualWorldRadius = colliderRadius * maxScale*Mathf.PI;
@@ -217,7 +217,7 @@ namespace Project.Scripts.Reflector
             Gizmos.DrawSphere(Vector3.zero, actualWorldRadius);
 
             Gizmos.color = originalGizmoColor;
-            Gizmos.matrix = originalGizmoMatrix;
+            Gizmos.matrix = originalGizmoMatrix;*/
         }
         /*
         private void Update()

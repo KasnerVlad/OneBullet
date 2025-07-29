@@ -1,6 +1,7 @@
 using Custom;
 using Project.Scripts.Character.Controller;
 using Project.Scripts.Enemy.CustomAIAgent;
+using Project.Scripts.SaveSystem.SaveSystemLogic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -26,11 +27,13 @@ namespace Project.Scripts.Enemy
     private CharacterController characterController;
     [SerializeField]private GameObject currentTarget;                // Текущая обнаруженная цель
     [SerializeField]private bool isChasing = false;                  // Флаг, указывающий, преследует ли враг цель
-    /*private bool isAgentActive = false;          */    // Флаг, указывающий, активирован ли NavMeshAgent и находится ли он на NavMesh
+    /*private bool isAgentActive = false;*/    // Флаг, указывающий, активирован ли NavMeshAgent и находится ли он на NavMesh
 
     [Header("EnemyManager")]
     [SerializeField] private EnemyManager _enemyManager;
 
+    [SerializeField] private EnemyAnimsController _enemyAnimsController;
+    [SerializeField]private BoxCollider knifeCollider;
     // Для движения CharacterController (NavMeshAgent не управляет напрямую)
     private Vector3 velocity; // Текущая скорость для Character Controller
     [Header("Gravity")]
@@ -44,9 +47,11 @@ namespace Project.Scripts.Enemy
     private Vector3 jumpForce;
     [SerializeField]private float JumpFallOff;
     [SerializeField]private float JumpHeight;
+    [SerializeField]private int damage;
     private Vector3 lastPos;
     private Vector3 lastTargetPos;
     private float _playerGravity;
+    private bool _attackTarget;
     void Awake()
     {
         agent = GetComponent<AsyncPathfinderAI>();
@@ -79,9 +84,9 @@ namespace Project.Scripts.Enemy
                         agent.speed = chaseSpeed;
 
                         // Если дистанция до цели достаточно большая, чтобы двигаться
-                        if (Vector3.Distance(transform.position, currentTarget.transform.position) > stopDistance)
+                        if (Vector3.Distance(transform.position, currentTarget.transform.position) > stopDistance&&!_enemyAnimsController.IsAttaking)
                         {
-                            
+                            _enemyAnimsController.UnAttack();
                             if (lastPos == transform.position || lastTargetPos != currentTarget.transform.position)
                             {
                                 lastPos = transform.position;
@@ -93,9 +98,7 @@ namespace Project.Scripts.Enemy
                         else // Если мы достаточно близко к цели
                         {
                             agent.isStopped = true;
-                            // Останавливаем NavMeshAgent
-                            // Возможно, здесь можно сбросить путь агента, чтобы он не пытался дергаться на месте
-                            // agent.ResetPath(); 
+                            _enemyAnimsController.Attack();
                         }/*
                     }*/
                     /*else
@@ -117,9 +120,21 @@ namespace Project.Scripts.Enemy
                         // Можно добавить логику патрулирования сюда
                     }#1#
                 }*/
-
+                else
+                {
+                    _enemyAnimsController.UnAttack();
+                }
+            }
+            else
+            {
+                _enemyAnimsController.UnAttack();
             }
             HandleMovementAndSync();
+        }
+        else
+        {
+            _enemyAnimsController.UnAttack();
+            agent.isStopped = true;
         }
     }
     void StartChasing(GameObject target)
@@ -149,6 +164,32 @@ namespace Project.Scripts.Enemy
         }
     }
 
+    public void StartAttack()
+    {
+        _attackTarget = false;
+    }/*
+    public void EndAttack()
+    {
+    }*/
+    public void Attack()
+    {
+        if (!_attackTarget&&knifeCollider!=null)
+        {
+            Collider[] colliders = Physics.OverlapBox(knifeCollider.transform.position, Vector3.Scale(knifeCollider.bounds.extents/2,knifeCollider.transform.lossyScale), knifeCollider.transform.rotation, targetLayer);
+            foreach (var collider in colliders)
+            {
+                if (collider.gameObject == AllEnemyController.Instance.PlayerControllerEnemy)
+                {
+                    _attackTarget = true;
+                    HpController hp = collider.gameObject.GetComponent<HpController>();
+                    if (hp != null)
+                    {
+                        hp.TakeDamage(damage);
+                    }
+                }
+            }
+        }
+    }
     public void Jump()
     {
         if (characterController.isGrounded)

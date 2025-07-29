@@ -6,6 +6,7 @@ using Project.Scripts.Character.Controller;
 using Project.Scripts.Enemy;
 using Project.Scripts.Enums;
 using Project.Scripts.Pool;
+using Project.Scripts.SaveSystem.SaveSystemLogic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -63,6 +64,8 @@ namespace Project.Scripts.Weapon
                             if (enemyManager != null)
                             {
                                 AllEnemyController.Instance.SetEnemyManager(enemyManager);
+                                
+                                if(SaveManager.Instance!=null) SaveManager.Instance.AddMoney(enemyManager.moneyAmount+SaveManager.Instance.GetMoneys());
                                 _weapon.OnHit();
                                 hited=true;
                             }

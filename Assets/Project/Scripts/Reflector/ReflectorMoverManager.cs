@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Custom;
 using UnityEngine;
 using TMPro;
 namespace Project.Scripts.Reflector
@@ -11,6 +13,18 @@ namespace Project.Scripts.Reflector
         [SerializeField] private GameObject rotatorPrefab;
         [SerializeField] private Camera editCamera;
         [SerializeField] private StringEffect stringEffect;
+        [SerializeField] private LayerMask reflectorRootLayer;
+        [SerializeField] private bool autoFindReflectors; 
+        private void Awake()
+        {
+            if (autoFindReflectors)
+            {
+                reflectors = new List<GameObject>();
+                reflectors.AddRange(FindObjectsOfType<GameObject>()
+                    .Where(g => ((1 << g.layer) & reflectorRootLayer) != 0)
+                    .ToList());
+            }
+        }
         private void Start()
         {
             foreach (var reflector in reflectors)
@@ -34,12 +48,13 @@ namespace Project.Scripts.Reflector
                     rotator.transform.rotation = reflector.transform.rotation;
                 }
 
-                if (mover != null && inputField != null)
+                /*
+                if (mover != null/* && inputField != null#1#)
                 {
                     movers.Add(mover);
                     mover.Initialize(reflector, editCamera, stringEffect);/*
-                    mover.transform.rotation = reflector.transform.rotation;*/
-                }
+                    mover.transform.rotation = reflector.transform.rotation;#1#
+                }*/
 
             }
         }
