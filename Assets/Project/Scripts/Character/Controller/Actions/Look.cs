@@ -1,4 +1,5 @@
 using System;
+using Project.Scripts.SaveSystem;
 
 namespace Player.Character
 {
@@ -6,32 +7,31 @@ namespace Player.Character
     using static Models;
     using Custom;
     public class Look : ILook
-    {
-        private readonly Transform _obj;
-        private readonly Camera _cam;
-        private readonly Vector3 _offset;
-        private Vector3 tagetRot;
-        private Vector3 tagetRotVelocity;
-        private Vector3 rot;
+    {/*
+        private readonly Transform _handRoot;
         
-        public Look(Transform obj, Camera camera, Vector3 offset)
-        {
-            _obj = obj;
+        private readonly Vector3 _handRootRotationOffset;*/
+        private readonly Transform _aimObj;
+        private readonly Camera _cam;
+        private Vector3 _velocity;
+        public Look(/*Transform handRoot, Vector3 handRootRotationOffset, */Transform aimObj, Camera camera)
+        {/*
+            _handRoot = handRoot;
+            
+            _handRootRotationOffset = handRootRotationOffset;*/
+            _aimObj = aimObj;
             _cam = camera;
-            _offset = offset;
         }
         public void CalculateView(Vector2 view,  float smoothTime)
         {
             Vector3 mouseScreenPosition = view;
-            mouseScreenPosition.z = _cam.WorldToScreenPoint(_obj.position).z;
-        
+            mouseScreenPosition.z = _cam.WorldToScreenPoint(_aimObj.position).z;
             Vector3 mouseWorldPosition = _cam.ScreenToWorldPoint(mouseScreenPosition);
             mouseWorldPosition.z = 0;
-            Vector2 direction = mouseWorldPosition - _obj.position;
-            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            tagetRot = new Vector3(0, 0, angle)+_offset;
-            rot = Vector3.SmoothDamp(rot, tagetRot, ref tagetRotVelocity, smoothTime/CTime.timeScale);
-            _obj.rotation = Quaternion.Euler(rot);
+            
+            /*
+            _handRoot.rotation = Quaternion.Euler(Helper.RotateTo<GameObject>(mouseWorldPosition, _handRoot.position, _handRootRotationOffset));*/
+            _aimObj.position = Vector3.SmoothDamp(_aimObj.position, mouseWorldPosition, ref _velocity, smoothTime);
         }
     }
 }
