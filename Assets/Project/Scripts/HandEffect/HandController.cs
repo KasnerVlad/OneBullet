@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Custom;
 using Project.Scripts;
 using Project.Scripts.Character;
+using Project.Scripts.Enemy;
 using Project.Scripts.Enums;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -54,6 +55,7 @@ public class HandController : MonoBehaviour
     {
         if (ModeManager.Instance.nowMode == Mode.EditMode)
         {
+            player = AllEnemyController.Instance.PlayerControllerEnemy;
             handLine.gameObject.SetActive(true);
             startPoint.SetActive(true);
             endPoint.SetActive(true);

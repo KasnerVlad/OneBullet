@@ -1,5 +1,6 @@
 /*using System.Collections.Generic;
 using JsonSave;
+using Project.Scripts.SaveSystem;
 using UnityEngine;
 
 namespace Project.Scripts.Custom
@@ -16,7 +17,7 @@ namespace Project.Scripts.Custom
         {
             Instance = this;
             _loggerData = new LoggerData();
-            _saveSystem = new JsonSaveSystem();
+            _saveSystem = new PCJsonSaveSystem();
         }
         public void WriteLog(float time, List<Vector3> points)
         {

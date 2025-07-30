@@ -11,6 +11,7 @@ namespace Project.Scripts.Character.Controller
         [SerializeField] private GameObject target;
         [SerializeField] private Vector3 offset;
         [SerializeField] private float smooth;
+        [SerializeField] private bool isNoPlayerChange;
         private Vector3 _velocity;
         public float boundaryOffset = 0.1f;    
     // Окончательные границы мира, за которые камера не должна выходить
@@ -19,7 +20,7 @@ namespace Project.Scripts.Character.Controller
 
     private void Start()
     {
-        target = AllEnemyController.Instance.GetPlayerControl();
+        if(!isNoPlayerChange) target = AllEnemyController.Instance.GetPlayerControl();
         if (_boxCollider == null || ( _blockCollider == null&&block) || target == null)
         {
             Debug.LogError("Один или несколько обязательных компонентов (BoxCollider2D камеры, BlockCollider2D, Target) не назначены!", this);
@@ -49,8 +50,11 @@ namespace Project.Scripts.Character.Controller
     {
         if (target == null || _boxCollider == null ||( _blockCollider == null&&block))
         {
-            target = AllEnemyController.Instance.GetPlayerControl();
-            if(target == null) Destroy(gameObject);
+            if(!isNoPlayerChange){
+                target = AllEnemyController.Instance.GetPlayerControl();/*
+                if(target == null) Destroy(gameObject);*/
+            
+            }
             return;
         }
         

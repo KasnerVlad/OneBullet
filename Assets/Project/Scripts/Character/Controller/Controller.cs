@@ -22,7 +22,7 @@ public class Controller : MonoBehaviour
     private Vector3 currentSpeed;
     [SerializeField] private Vector2 view;
     [Header("References")]
-    [SerializeField] private Transform gunHolder;
+    [SerializeField] private Transform aimObj;
     [Space(10),Header("Settings")]
     [SerializeField]private PlayerSettings playerSettings;
     [SerializeField]private LayerMask groundLayer;/*
@@ -87,15 +87,15 @@ public class Controller : MonoBehaviour
 
     private void Start()
     {
-        look = new Look(gunHolder, AllEnemyController.Instance.GetMainCamera(), camOffset);
+        look = new Look(aimObj, AllEnemyController.Instance.GetMainCamera());
         move = new Move(playerSettings.jumpSettings,playerSettings.movementSettings, transform, characterController);
     }
     private void FixedUpdate()
     {
         if (enemyManager.IsPlayerControl)
         {
-            move.CalculateMovement(isSprinting, movement, ref currentSpeed);
-            if (canLook && ModeManager.Instance.nowMode == Mode.ShootMode && !InputFieldFocusChecker.InputFieldFocused) { look.CalculateView(view, rotSmoothTime); }
+            move.CalculateMovement(isSprinting, movement, ref currentSpeed); 
+            if(canLook&&ModeManager.Instance.nowMode==Mode.ShootMode&&!InputFieldFocusChecker.InputFieldFocused){ look.CalculateView(view, rotSmoothTime); Debug.Log("Look");}
             move.CalculateJump(isJumping);
         }
     }
