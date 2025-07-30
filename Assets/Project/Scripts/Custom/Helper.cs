@@ -70,7 +70,17 @@ namespace Custom
             
             return finalRotation;
         }
-
+        public static Vector3 RotateTo<T>(Vector3 to, Vector3 pos, Vector3 offset)
+        {
+            Vector3 direction = to - pos;
+        
+            float angleRad = Mathf.Atan2(direction.y, direction.x);
+            float angleDeg = angleRad * Mathf.Rad2Deg;
+        
+            Vector3 finalRotation = new Vector3(0f, 0f, angleDeg) + offset;
+            
+            return finalRotation;
+        }
         public static float GetFloatFromInputField(TMP_InputField inputField)
         {
             if (inputField == null || string.IsNullOrEmpty(inputField.text))
