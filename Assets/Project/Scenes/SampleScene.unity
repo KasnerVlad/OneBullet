@@ -3934,14 +3934,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8179921294972549833, guid: 558ed9007d8905946bc24e9b8cfdec65, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8179921294972549833, guid: 558ed9007d8905946bc24e9b8cfdec65, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5971,7 +5963,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f459cf153b10426fa7f35d1fceb81f25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _logFilePath: D:/Gong.json
 --- !u!4 &1953765645
 Transform:
   m_ObjectHideFlags: 0
