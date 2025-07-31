@@ -275,6 +275,10 @@ namespace Project.Scripts.Enemy
     }
         public void OnDeath()
         {
+            if (GetComponent<EnemyManager>().IsPlayerControl)
+            {
+                FindAnyObjectByType<MainMenuManager>().gameObject.SetActive(true);
+            }
             Destroy(gameObject);
         }
     }

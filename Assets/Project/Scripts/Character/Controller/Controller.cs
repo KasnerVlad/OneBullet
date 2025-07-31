@@ -29,6 +29,7 @@ public class Controller : MonoBehaviour
     [SerializeField]private Camera cam;*/
     [SerializeField]private Vector3 camOffset;
     [SerializeField]private float rotSmoothTime;
+    [SerializeField] private Animator animator;
     private bool isSprinting;
     private bool isJumping;
     private ILook look;
@@ -92,10 +93,11 @@ public class Controller : MonoBehaviour
     }
     private void FixedUpdate()
     {
+        animator.SetFloat("Speed", GetComponent<CharacterController>().velocity.magnitude);
         if (enemyManager.IsPlayerControl)
         {
-            move.CalculateMovement(isSprinting, movement, ref currentSpeed); 
-            if(canLook&&ModeManager.Instance.nowMode==Mode.ShootMode&&!InputFieldFocusChecker.InputFieldFocused){ look.CalculateView(view, rotSmoothTime); Debug.Log("Look");}
+            move.CalculateMovement(isSprinting, movement, ref currentSpeed);
+            if (canLook && ModeManager.Instance.nowMode == Mode.ShootMode && !InputFieldFocusChecker.InputFieldFocused) { look.CalculateView(view, rotSmoothTime); Debug.Log("Look"); }
             move.CalculateJump(isJumping);
         }
     }
