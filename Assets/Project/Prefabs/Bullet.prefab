@@ -157,6 +157,7 @@ MonoBehaviour:
   smooth: 0.001
   rotOffset: {x: 0, y: 0, z: 0}
   defaultSpeed: 100
+  hitEffect: {fileID: 5327585143478399115, guid: fccb6cccb1526a941ae7f2f1f574e212, type: 3}
   bulletSpeedChange: 10
   enemyLayerMask:
     serializedVersion: 2

@@ -21,6 +21,7 @@ namespace Project.Scripts.Weapon
         private int lastIndex;
         [SerializeField] private Vector3 rotOffset;
         [SerializeField] private float defaultSpeed;
+        [SerializeField] private GameObject hitEffect;
         private float speed;
         [SerializeField] private float bulletSpeedChange;
         public LayerMask enemyLayerMask;
@@ -64,8 +65,10 @@ namespace Project.Scripts.Weapon
                             if (enemyManager != null)
                             {
                                 AllEnemyController.Instance.SetEnemyManager(enemyManager);
+                                enemyManager.mesh.GetComponent<SkinnedMeshRenderer>().material = enemyManager.infectedMaterial;
+                                enemyManager.hitSound.Play();
                                 
-                                if(SaveManager.Instance!=null) SaveManager.Instance.AddMoney(enemyManager.moneyAmount+SaveManager.Instance.GetMoneys());
+                                if (SaveManager.Instance != null) SaveManager.Instance.AddMoney(enemyManager.moneyAmount + SaveManager.Instance.GetMoneys());
                                 _weapon.OnHit();
                                 hited=true;
                             }
@@ -97,6 +100,7 @@ namespace Project.Scripts.Weapon
 
                     if (Vector3.Distance(transform.position, _currentTarget) < 0.01f && lastIndex < points.Count - 1)
                     {
+                        Instantiate(hitEffect, transform.position, Quaternion.identity);
                         speed = SpeedShiftByReflectorType(path[_currentTarget]);
                         lastIndex++;
                         _currentTarget = points[lastIndex];

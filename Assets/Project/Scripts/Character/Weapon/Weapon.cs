@@ -42,20 +42,21 @@ namespace Project.Scripts.Weapon
         private void Shoot()
         {
             Debug.Log("Shoot");
-            if (bulletCount > 0&&bulletPathPreview.GetPathCount()>1)
+            GetComponent<AudioSource>().Play();
+            if (bulletCount > 0 && bulletPathPreview.GetPathCount() > 1)
             {
                 bulletCount--;
                 AllBulletGiver.bulletGiver.SetNeededPrefab(bulletPrefab);
                 AllBulletGiver.bulletGiver.SetPosition(firePoint.position);
                 AllBulletGiver.bulletGiver.SetRotation(firePoint.rotation);
                 GameObject bulletGameObject = AllBulletGiver.bulletGiver.GetGameObjectFromPool();
-                
+
                 Bullet bullet = bulletGameObject.GetComponent<Bullet>();
                 if (bullet != null)
                 {
                     bullet.Init(AllBulletGiver.bulletGiver, this, enemyManager);
-                    _=bullet.Shoot(bulletPathPreview.GetPoints());
-                    lastBullet=bullet;
+                    _ = bullet.Shoot(bulletPathPreview.GetPoints());
+                    lastBullet = bullet;
                 }
             }
 

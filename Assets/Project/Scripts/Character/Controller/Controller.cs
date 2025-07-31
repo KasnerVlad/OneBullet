@@ -30,6 +30,7 @@ public class Controller : MonoBehaviour
     [SerializeField]private Vector3 camOffset;
     [SerializeField]private float rotSmoothTime;
     [SerializeField] private Animator animator;
+    [SerializeField] private AudioSource walkingSound;
     private bool isSprinting;
     private bool isJumping;
     private ILook look;
@@ -99,6 +100,14 @@ public class Controller : MonoBehaviour
             move.CalculateMovement(isSprinting, movement, ref currentSpeed);
             if (canLook && ModeManager.Instance.nowMode == Mode.ShootMode && !InputFieldFocusChecker.InputFieldFocused) { look.CalculateView(view, rotSmoothTime); Debug.Log("Look"); }
             move.CalculateJump(isJumping);
+        }
+        if (GetComponent<CharacterController>().velocity.magnitude <= 0.1f)
+        {
+            walkingSound.enabled = false;
+        }
+        else if (GetComponent<CharacterController>().velocity.magnitude >= 0.1f)
+        {
+            walkingSound.enabled = true;
         }
     }
     public void CanMove(bool canMove) {
